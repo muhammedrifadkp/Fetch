@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "rifad",
+      "email": "rifad@gmail.com",
+      "imageURL": "https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
+    },
+    {
+      "id": "2",
+      "name": "sooraj",
+      "email": "sooraj@gmail.com",
+      "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1zwhySGCEBxRRFYIcQgvOLOpRGqrT3d7Qng&s"
+    }
+  ]
+}

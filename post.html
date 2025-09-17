@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="form">
+        <input type="number" name="id" id="userId" placeholder="enter id"><br><br>
+        <input type="text" name="userName" id="userName" placeholder="enter Name"><br><br>
+        <input type="email" name="userEmail" id="userEmail" placeholder="enter email"><br><br>   
+        <button type="submit">submit</button>
+    </form>
+    
+    <script>
+        let form= document.querySelector("#form")
+        form.addEventListener("submit",(e)=>{
+            e.preventDefault()
+            let id = document.querySelector("#userId").value.trim()
+            let name = document.querySelector("#userName").value.trim()
+            let email = document.querySelector("#userEmail").value.trim()
+            if(!id||!name||!email) return
+            const newData = {id,name,email}
+
+            async function sendData() {
+                const response = await fetch("http://localhost:3000/names/",{
+                    method:"POST",
+                    headers:{"content-type":"application/json"},
+                    body:JSON.stringify(newData)
+                })
+                form.rest()
+            }
+            
+            sendData()
+        })
+    </script>
+</body>
+</html>

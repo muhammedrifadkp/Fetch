@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #list div{
+            height: 400px;
+            width: 300px;
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Fetch Data</h1>
+    <button onclick="fetchData()">fetch data</button>
+    <div id="list">
+
+    </div>
+
+    <h1>Post Data</h1>
+
+    <form id="postForm">
+        <input type="number" name="id" id="userId" placeholder="enter id"><br><br>
+        <input type="text" name="userName" id="userName" placeholder="enter Name"><br><br>
+        <input type="email" name="userEmail" id="userEmail" placeholder="enter email"><br><br>
+        <input type="text" name="" id="imageURL">
+        <button type="submit">submit</button>
+    </form>
+
+
+
+
+
+    <h1>Put Data</h1>
+
+    <form id="putForm">
+        <input type="number" id="updateId" placeholder="enter update Id"><br><br>
+        <input type="text" id="putName" placeholder="Enter Update name"><br><br>
+        <input type="email" id="putEmail" placeholder="Enter Update email"><br><br>
+
+        <button type="submit">Update</button>
+    </form>
+
+    <h1>Delete Data</h1>
+
+    <form id="deleteForm">
+        <input type="number" id="deleteId">
+        <button type="submit">delete</button>
+    </form>
+
+
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch("http://localhost:3000/users")
+                const datas = await response.json()
+                const list = document.querySelector("#list")
+                for (let data of datas) {
+                    const items = document.createElement("div")
+                    items.innerHTML = `<img src="${data.imageURL}" height="100px" alt="image">
+                                        <h1>${data.name}</h1>
+                                        <h2>${data.email}</h2>
+                                        <h3>${data.id}</h3>`
+                    list.appendChild(items)
+                }
+            }
+            catch (err) {
+                console.error("fetch error", err);
+            }
+        }
+
+        let postForm = document.querySelector("#postForm")
+        postForm.addEventListener("submit", (e) => {
+            e.preventDefault()
+            let id = document.querySelector("#userId").value.trim()
+            let name = document.querySelector("#userName").value.trim()
+            let email = document.querySelector("#userEmail").value.trim()
+            let imageURL = document.querySelector("#imageURL").value;
+            if (!id || !name || !email) return
+
+            const newData = { id, name, email, imageURL }
+
+            async function sendData() {
+                const response = await fetch("http://localhost:3000/users", {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify(newData)
+                })
+                postForm.reset()
+            }
+
+            sendData()
+        })
+
+        let putForm = document.querySelector("#putForm")
+
+        putForm.addEventListener("submit", (e) => {
+            e.preventDefault()
+            const id = document.querySelector("#updateId").value;
+            const name = document.querySelector("#putName").value.trim();
+            const email = document.querySelector("#putEmail").value.trim();
+            if (!id || !name || !email) return
+            let updatedData = { name, email }
+
+            async function updateData() {
+                const response = await fetch(`http://localhost:3000/users/${id}`, {
+                    method: "PUT",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify(updatedData)
+                })
+                putForm.reset()
+            }
+            updateData()
+
+        })
+
+
+        let deleteForm = document.querySelector("#deleteForm")
+
+        deleteForm.addEventListener("submit", (e) => {
+            e.preventDefault()
+            const id = document.querySelector("#deleteId").value
+            if (!id) return;
+
+            const confirmDelete = confirm(`Delete user id : ${id}`)
+            if (!confirmDelete) return;
+
+            async function deleteData() {
+                const response = await fetch(`http://localhost:3000/users/${id}`, {
+                    method: "DELETE"
+                })
+            }
+            deleteForm.reset()
+            deleteData()
+        })
+
+    </script>
+</body>
+
+</html>
